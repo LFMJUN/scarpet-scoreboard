@@ -23,7 +23,7 @@ __on_start() -> (
 
     // 初始化全局变量，用于计分板切换
     global_switch = 'online_time';
-    global_switch_time = 300;
+    global_switch_time = 300; //300游戏刻/20=15秒 按需调整
     global_counter = 0;
 );
 
@@ -33,7 +33,7 @@ __on_tick() -> (
     if (global_counter == global_switch_time,
         global_counter = 0;
         // 如果当前显示 'tools_used_all'，则切换到 'online_time'，否则切换回 'tools_used_all'
-        if (global_switch == 'tools_used_all', global_switch = 'online_time',global_switch == 'online_time', global_switch = 'tools_used_all');
+        if (global_switch == 'tools_used_all', global_switch = 'online_time', global_switch == 'online_time', global_switch = 'tools_used_all');
         // 更新计分板显示
         scoreboard_display('sidebar', global_switch);
     );
@@ -74,9 +74,10 @@ __on_tick() -> (
             // 更新挖掘榜计分板
             scoreboard('tools_used_all', _~'name', tools_used_score);
         );
+
        // 更新在线时间
        if (_~'player_type' != 'fake',
-            // 获取在线时间（以秒为单位）
+            // 获取在线时间（以分为单位）
             current_time = floor(statistic(_~'name', 'custom', 'play_time') / 20 / 60);
             // 更新在线时长计分板
             scoreboard('online_time', _~'name', current_time);
